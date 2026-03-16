@@ -5,7 +5,7 @@ from typing import List, Dict, Any
 
 from elasticsearch import Elasticsearch
 
-from elasticsearch.helper import bulk
+from elasticsearch.helpers import bulk
 from sentence_splitter import SentenceSplitter
 from sentence_transformers import SentenceTransformer
 
@@ -167,7 +167,21 @@ def main() -> None:
 
     # TODO: Create several semantic search queries and print the results.
     # Use the function semantic_search()
+    queries = [
+    "books about dystopian societies and censorship",
+    "adventure stories set in space",
+    "love stories with tragic endings",
+    "children who discover magical worlds",
+    "war and its psychological effects on soldiers"
+    ]
 
+for query in queries:
+    print(f"\nQuery: '{query}'")
+    results = semantic_search(es, INDEX_NAME, query, k=3)
+    for hit in results["hits"]["hits"]:
+        src = hit["_source"]
+        score = hit["_score"]
+        print(f"  [{score:.4f}] {src.get('title')} — chunk: {src.get('chunk_id')}")
 
 if __name__ == "__main__":
     main()
