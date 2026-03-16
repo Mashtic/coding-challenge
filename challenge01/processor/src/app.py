@@ -4,6 +4,8 @@ from pathlib import Path
 from typing import List, Dict, Any
 
 from elasticsearch import Elasticsearch
+
+from elasticsearch.helper import bulk
 from sentence_splitter import SentenceSplitter
 from sentence_transformers import SentenceTransformer
 
@@ -119,7 +121,16 @@ def proccess_documents(document: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 def index_documents(es: Elasticsearch, index_name: str, docs: List[Dict[str, Any]]) -> None:
     # TODO: Index documents into Elasticsearch
-    return
+    actions = [
+        {
+            "_index": index_name,
+            "_source": doc
+        }
+        for doc in docs
+    ]
+    success, failed = bulk(es, actions, raise_on_error=False)
+    print(f"Indexed {success} chunks, {len(failed)} failed.")
+    
 
 
 def semantic_search(es: Elasticsearch, index_name: str, query_text: str, k: int = 3) -> Dict[str, Any]:
