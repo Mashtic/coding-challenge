@@ -175,13 +175,13 @@ def main() -> None:
     "war and its psychological effects on soldiers"
     ]
 
-for query in queries:
-    print(f"\nQuery: '{query}'")
-    results = semantic_search(es, INDEX_NAME, query, k=3)
-    for hit in results["hits"]["hits"]:
-        src = hit["_source"]
-        score = hit["_score"]
-        print(f"  [{score:.4f}] {src.get('title')} — chunk: {src.get('chunk_id')}")
+    for query in queries:
+        print(f"\nQuery: '{query}'")
+        results = semantic_search(es, INDEX_NAME, query, k=3)
+        for hit in results["hits"]["hits"]:
+            src = hit["_source"]
+            score = hit["_score"]
+            print(f"  [{score:.4f}] {src.get('title')} — chunk: {src.get('chunk_id')}")
 
 if __name__ == "__main__":
     main()
