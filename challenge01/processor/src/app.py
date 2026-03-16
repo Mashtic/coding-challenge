@@ -71,7 +71,8 @@ def split_into_chunks(text: str, max_sentences: int = 5) -> List[str]:
 
 def generate_embedding(text: str) -> List[float]:
     # TODO: Create the required code to generate text embeddings.
-    return None
+    embedding = model.encode(text)
+    return embedding.tolist()
 
 
 def proccess_documents(document: Dict[str, Any]) -> List[Dict[str, Any]]:
