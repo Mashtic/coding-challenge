@@ -87,10 +87,16 @@ def proccess_documents(document: Dict[str, Any]) -> List[Dict[str, Any]]:
     doc_id = document.get("id")
     title = document.get("title", "")
     description = document.get("description", "")
+    authors = document.get("authors", [])
+    subjects = document.get("subjects", [])
+    language = document.get("language", [])
+    first_publish_year = document.get("first_publish_year")
 
     if not doc_id or not description:
         raise ValueError("Document must contain at least 'id' and 'description'")
-
+    #Filter non-ASCII characters and ensure subjects are capitalized
+    description = description.encode("ascii", errors="ignore").decode("ascii")
+    subjects = [subject.capitalize() for subject in subjects]
     chunks = split_into_chunks(description)
     result = []
 
@@ -101,6 +107,10 @@ def proccess_documents(document: Dict[str, Any]) -> List[Dict[str, Any]]:
             "chunk_id": f"{doc_id}-{idx}",
             "title": title,
             "description": chunk,
+            "authors": authors,
+            "subjects": subjects,
+            "language": language,
+            "first_publish_year": first_publish_year,
             "embedding": embedding
         })
 
