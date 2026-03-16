@@ -23,16 +23,23 @@ def create_index(es: Elasticsearch, index_name: str) -> None:
     # Create the index if it does not exist.
     if es.indices.exists(index=index_name):
         return
-
     mapping = {
         "mappings": {
             "properties": {
                 "doc_id": {"type": "keyword"},
                 "chunk_id": {"type": "keyword"},
                 # TODO: Complete the mapping with the required fields and types.
+                "title": {"type": "text"},
+                "description": {"type": "text"},
+                "authors": {"type": "keyword"},
+                "subjects": {"type": "keyword"},
+                "language": {"type": "keyword"},
+                "first_publish_year": {"type": "integer"},
                 "embedding": {
                     "type": "dense_vector",
-                    "dims": 384 # Adjust the dimensions where required.
+                    "dims": 384,# Adjust the dimensions where required.
+                    "index": True,
+                    "similarity": "cosine"
                 }
             }
         }
